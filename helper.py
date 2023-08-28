@@ -1,11 +1,3 @@
-'''
-Given csv with:
-
-CALL NUMBER,COURSE,COURSE NAME,SECTION,PROFESSOR,DAYS,TIME,LOCATION
-11218,COMS4111,INTRODUCTION TO DATABASES,001,Luis Gravano,Tu Th,1:10pm-2:25pm,301 Pupin Laboratories
-
-'''
-
 DAYS_OF_WEEK = {
     "M": 0,
     "Tu": 1,
@@ -77,21 +69,22 @@ def read_sections_csv(filename):
             courses[course][call_num] = {
                 "section": section,
                 "prof": prof,
-                "times": times
+                "times": times,
+                "location": location,
             }
 
     return courses
 
 
-# acceptable input: two dictionaries, where key "times" holds an array where each times[i] has a
+# acceptable input: two arrays where each times[i] has a
 #   start time, end time tuple in 24h float. If no lectures that day, None.
 # output: a boolean indicating whether the two sessions conflict throughout the week.
-def sections_conflict(section1, section2):
+def sections_conflict(times1, times2):
     for i in range(len(DAYS_OF_WEEK)):
-        if section1["times"][i] is not None and section2["times"][i] is not None:
+        if times1[i] is not None and times2[i] is not None:
             # both sections have lectures on this day
-            start1, end1 = section1["times"][i]
-            start2, end2 = section2["times"][i]
+            start1, end1 = times1[i]
+            start2, end2 = times2[i]
 
             if (start1 <= end2 and end1 >= start2) or (start2 <= end1 and end2 >= start1):
                 # there is a time conflict on this day
@@ -108,8 +101,8 @@ def sections_conflict(section1, section2):
 # print(_convert_time_period("1:10pm-2:25pm"))
 # print(_convert_time_period("10:10AM-12:40PM"))
 
-d = read_sections_csv("/Users/ange/PycharmProjects/course_scheduler/course_scheduler/sections.csv")
+# d = read_sections_csv("/Users/ange/PycharmProjects/course_scheduler/course_scheduler/sections.csv")
 # print(d)
 
-print(sections_conflict(d["COMS4111"]["11218"], d["PSYC1001"]["00393"]))
-print(sections_conflict(d["COMS4111"]["11218"], d["PSYC1001"]["00447"]))
+# print(sections_conflict(d["COMS4111"]["11218"], d["PSYC1001"]["00393"]))
+# print(sections_conflict(d["COMS4111"]["11218"], d["PSYC1001"]["00447"]))
